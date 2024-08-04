@@ -1,0 +1,28 @@
+// В рамках БД audiohosting_150124 напишите следующие запросы:
+// 1. Заблокировать всех не заблокированных пользователей из China и уменьшить их баланс на 25 EUR.
+// 2. Вывести имена и баланс заблокированных пользователей из China и France, если их баланс находится в диапазоне значений от 10 до 1000 (включительно).
+
+//Решения данных задач оформить одним запросом на слияние в рамках репозитория Hello
+
+//Задача 1
+db.users.updateMany(
+    {
+        country: 'China',
+        is_blocked: { $ne: true }
+    },
+    {
+        is_blocked: true,
+        $inc: { balance: -25 }
+    }
+)
+
+//Задача 2
+db.users.find(
+    {
+        is_blocked: true,
+        country: ["China", "France"],
+        balance: { $gte: 10, $lte: 1000 }
+    }, //filter
+
+    { fullname: 1, balance: 1, _id: 0 } //projection
+)
